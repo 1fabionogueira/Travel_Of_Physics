@@ -1,0 +1,7 @@
+theme: jekyll-theme-dark_poole
+
+baseurl: /Travel_Of_Physics
+
+collections:
+  participantes:
+    output: true
