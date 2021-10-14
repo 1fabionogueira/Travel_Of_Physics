@@ -1,95 +1,142 @@
 import pygame
-import math
+import numpy as np
 import os
 
-class Game():
-    '''
-        Classe reposnsável por gerenciar o jogo
-    '''
+screenSize = (1280, 720)
 
-    def __init__(self, screenSize = (800, 600), fps=60, title='Travel Of Physics', icon=None):
+screen = pygame.display.set_mode(screenSize)
 
-        self.gameRunning = True
+pygame.display.set_caption('Protótipo')
 
-        self.screenSize = screenSize
-        self.fps = fps
-        self.title = title
-        self.icon = icon
+pygame.font.init()
 
-        self.initGame()
+gamefont = pygame.font.SysFont('Arial', 35)
 
-    def loadSpriteSheetPacket(self):
-        pass
+gameClock = pygame.time.Clock()
 
-    def loadImagePacket(self):
-        pass
+FPS = 100
 
-    def initGame(self):
+g = 0.001 
+alfa = 58 * np.pi / 180
 
-        '''
-            Função responsáveç por inicializar e configurar a tela do jogo,
-            essa função não possui parâmetros
-        '''
-        
-        self.screen = pygame.display.set_mode(self.screenSize)
-        pygame.display.set_caption(self.title)
+##############################################
 
-        if(self.icon != None):
-            pygame.display.set_icon(self.icon)
+class Gobjeto:
+    x = 0
+    y = 0
 
-        self.gameClock = pygame.time.Clock()
+    largura = 0
+    altura = 0
 
+obstaculo_1 = Gobjeto()
+obstaculo_2 = Gobjeto()
 
-    def gameMain(self):
-        '''
-            Loop principal do jogo, essa função não possui parâmetros
-        '''
+###### obstáculo 1 ######
 
-        while self.gameRunning:
-            self.deltaTime = self.gameClock.tick(self.fps)
+obstaculo_1.x = screenSize[0] / 2
+obstaculo_1.y = 0
+obstaculo_1.largura = 40
+obstaculo_1.altura = 220
 
-            self.screen.fill((0, 0, 0))
+###### obstáculo 2 ######
 
-            for event in pygame.event.get():
-                self.gameEvent(event)
+obstaculo_2.largura = 40
+obstaculo_2.altura = 460
+obstaculo_2.x = screenSize[0] / 2
+obstaculo_2.y = screenSize[1] - obstaculo_2.altura
 
-            self.gameUpdate()
-            self.gameRender()
+################################################
 
-            pygame.display.update()
+class Gastronauta:
+    vel_x = 0
+    vel_y = 0
+    vel_inicial = 0
 
-        pygame.quit()
+    raio = 0
 
-    def gameEvent(self, event):
-        '''
-            Função responsável por gerenciar os eventos do display
-            event -> contém a estrutura do evento (veja a documentação do pygame
-            para mais detalhes)
-        '''
+    x_inicial = 0
+    y_inicial = 0
+    x = 0
+    y = 0
 
-        if(event.type == pygame.QUIT):
-            self.gameRunning = False
-        if(event.type == pygame.KEYDOWN):
-            if(event.key == pygame.K_ESCAPE):
-                self.gameRunning = False
+astronauta = Gastronauta()
 
-    def gameUpdate(self):
-        '''
-            Função responsável por atualizar a lógica do jogo
-        '''
+astronauta.raio = 15
 
-        pass
+astronauta.x_inicial = 70
+astronauta.y_inicial = screenSize[1] - 70
 
-    def gameRender(self):
-        '''
-            Função responsável por desenhar na tela do jogo
-        '''
+astronauta.x = astronauta.x_inicial
+astronauta.y = astronauta.y_inicial
 
-        pass
+astronauta.vel_inicial = (1 / FPS) * 100
+astronauta.vel_y = astronauta.vel_inicial * np.sin(alfa)
+astronauta.vel_x = astronauta.vel_inicial * np.cos(alfa)
 
-game = Game()
-game.gameMain()
+##############################################
 
+## imagem do canhão
+canhão_largura, canhão_altura = 100, 100
+canhão_image = pygame.image.load(os.path.join('Projeto_Semestre/assets', 'cannon.png'))
+canhão = pygame.transform.scale(canhão_image, (canhão_largura, canhão_altura))
 
+##############################################
 
+def gameMain():
+    gameRunning = True
 
+    while gameRunning:
+        screen.fill((128, 128, 128))
+
+        screen.blit(canhão, (0, screenSize[1] - canhão_altura))
+
+        deltaTime = gameClock.tick(FPS)
+
+        for event in pygame.event.get():
+            if(event.type == pygame.QUIT):
+                gameRunning = False
+            elif(event.type == pygame.KEYDOWN):
+                if(event.key == pygame.K_ESCAPE):
+                    gameRunning = False
+
+        update(deltaTime)
+        render(deltaTime)
+
+        pygame.display.update()
+
+    pygame.quit()
+
+def update(deltaTime):
+
+    # movimento horizontal
+    astronauta.x = astronauta.x + astronauta.vel_x * deltaTime
+
+    # movimento vertical 
+    astronauta.vel_y = astronauta.vel_y - g * deltaTime
+    astronauta.y = astronauta.y - astronauta.vel_y * deltaTime
+
+    # cria rect do jogador, máquina e da bola para utilizar com a função colliderect do módulo Rect
+    rectastronauta = pygame.Rect((astronauta.x - astronauta.raio, astronauta.y + astronauta.raio, 2 * astronauta.raio, 2 * astronauta.raio))
+    rectobstaculo_1 = pygame.Rect((obstaculo_1.x, obstaculo_1.y, obstaculo_1.largura, obstaculo_1.altura))
+    rectobstaculo_2 = pygame.Rect((obstaculo_2.x, obstaculo_2.y, obstaculo_2.largura, obstaculo_2.altura))
+
+    # verifica se o astronauta colidiu com o obstáculo
+    if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2)):
+        astronauta.vel_x = 0 * astronauta.vel_x
+
+    # verifica as colisões do astronauta no obstáculo (reverte a velocidade_x se ocorrer colisão, ou seja, faz um espelhamento em relação a horizontal)
+    if(astronauta.x >= screenSize[0] - 2 * astronauta.raio or astronauta.x <= 0 + 2 * astronauta.raio):
+        astronauta.vel_x = 0 * astronauta.vel_x
+
+    # if(astronauta.y >= screenSize[1] - astronauta.raio):
+        # astronauta.vel_y = (-1) * astronauta.vel_y * .70
+
+def render(deltaTime):
+
+    # criar objetos
+    pygame.draw.rect(screen, (255, 255, 255), (obstaculo_1.x, obstaculo_1.y, obstaculo_1.largura, obstaculo_1.altura), border_bottom_left_radius = 20, border_bottom_right_radius = 20)
+    pygame.draw.rect(screen, (255, 255, 255), (obstaculo_2.x, obstaculo_2.y, obstaculo_2.largura, obstaculo_2.altura), border_top_left_radius = 20, border_top_right_radius = 20)
+    pygame.draw.circle(screen, (0, 0, 0), (astronauta.x, astronauta.y), astronauta.raio)
+    
+
+gameMain()
