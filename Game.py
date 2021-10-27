@@ -38,6 +38,9 @@ class Astronauta():
     dir_x = 0
     dir_y = 0
 
+    last_vel_x = 0
+    last_vel_y = 0
+
 
 class Game():
 
@@ -57,7 +60,7 @@ class Game():
         self.initGame() # inicializa o jogo
 
         # ângulo de abertura do canhão (°)
-        self.alfa = 70 * np.pi / 180
+        self.alfa = 60 * np.pi / 180
 
         # Define o obstaculo_1 como objeto da classe Objeto 
 
@@ -89,7 +92,7 @@ class Game():
         self.astronauta.x = self.astronauta.x_inicial
         self.astronauta.y = self.astronauta.y_inicial
 
-        self.astronauta.vel_inicial = (1 / self.fps) * 116
+        self.astronauta.vel_inicial = (1 / self.fps) * 108
         self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.alfa)
         self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.alfa)
 
@@ -124,6 +127,7 @@ class Game():
 
         while self.gameRunning:
 
+            self.screen.fill((128,128,128))
             self.deltaTime = self.gameClock.tick(self.fps)
 
             for event in pygame.event.get():
@@ -171,28 +175,38 @@ class Game():
         self.astronauta.y = self.astronauta.y - self.astronauta.vel_y * self.deltaTime
 
         # cria rect do jogador, máquina e da bola para utilizar com a função colliderect do módulo Rect
-        rectastronauta = pygame.Rect((self.astronauta.x - self.astronauta.raio, self.astronauta.y + self.astronauta.raio, 2 * self.astronauta.raio, 2 * self.astronauta.raio))
+        rectastronauta = pygame.Rect((self.astronauta.x - self.astronauta.raio, self.astronauta.y - self.astronauta.raio, 2 * self.astronauta.raio, 2 * self.astronauta.raio))
         rectobstaculo_1 = pygame.Rect((self.obstaculo_1.x, self.obstaculo_1.y, self.obstaculo_1.largura, self.obstaculo_1.altura))
         rectobstaculo_2 = pygame.Rect((self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
 
-        # verifica se o astronauta colidiu com o obstáculo
-        if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2)):
-            self.astronauta.vel_x = -1 * self.astronauta.vel_x
+        pygame.draw.rect(self.screen, (255, 0, 0), rectastronauta)
 
-        # verifica as colisões do astronauta no obstáculo (reverte a velocidade_x se ocorrer colisão, ou seja, faz um espelhamento em relação a horizontal)
-        if(self.astronauta.x >= self.screenSize[0] - 2 * self.astronauta.raio or self.astronauta.x <= 0 + 2 * self.astronauta.raio):
-            self.astronauta.vel_x = -1 * self.astronauta.vel_x
+        # desenha o objeto_1
+        pygame.draw.rect(self.screen, (255, 255, 255), (self.obstaculo_1.x, self.obstaculo_1.y, self.obstaculo_1.largura, self.obstaculo_1.altura))
+
+        # desenha a objeto_2
+        pygame.draw.rect(self.screen, (255, 255, 255), (self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
+
+        if self.astronauta.last_vel_x != self.astronauta.vel_x or self.astronauta.last_vel_y != self.astronauta.vel_y:
+
+            # verifica se o astronauta colidiu com o obstáculo
+            if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2)):
+                self.astronauta.vel_x = -.5 * self.astronauta.vel_x
+                self.astronauta.last_vel_x = self.astronauta.vel_x
+
+            # verifica as colisões do astronauta no obstáculo (reverte a velocidade_x se ocorrer colisão, ou seja, faz um espelhamento em relação a horizontal)
+            if(self.astronauta.x >= self.screenSize[0] - 2 * self.astronauta.raio or self.astronauta.x <= 0 + 2 * self.astronauta.raio):
+                self.astronauta.vel_x = -.5 * self.astronauta.vel_x
+                self.astronauta.last_vel_x = self.astronauta.vel_x
 
         # if(astronauta.y >= screenSize[1] - astronauta.raio):
             # astronauta.vel_y = (-1) * astronauta.vel_y * .70
 
-
-
         keys = pygame.key.get_pressed()
  
         # salva a direção que o astronauta está indo
-        self.astronauta.dir_x = 1
-        self.astronauta.dir_y = 1
+        self.astronauta.dir_x = self.astronauta.vel_x
+        self.astronauta.dir_y = -self.astronauta.vel_y
 
         # normalização do vetor direção
         if(self.astronauta.dir_x != 0 and self.astronauta.dir_y != 0):
@@ -200,29 +214,6 @@ class Game():
 
             self.astronauta.dir_x = self.astronauta.dir_x / tmp_normal
             self.astronauta.dir_y = self.astronauta.dir_y / tmp_normal
-
-        # pega um pixel de cor na direção de movimentação (200% a frente do raio)
-        color = self.screen.get_at(
-                            (
-                                int(self.astronauta.x + self.astronauta.dir_x * self.astronauta.raio * 2.0),
-                                int(self.astronauta.y + self.astronauta.dir_y * self.astronauta.raio * 2.0)
-                            ))
-
-        '''
-            verifica 200% a frente de se raio se é um pixel proibido!
-            se não for proibido, move o jogador, coloquei a cor branca como proibida
-        '''
-        if(color != (255, 255, 255)):
-
-            # salva a ultima coordenada x e y do astronauta
-            self.astronauta.last_x = self.astronauta.x
-            self.astronauta.last_y = self.astronauta.y
-
-            # atualiza a coordenada x e y do astronauta
-            self.astronauta.x += self.astronauta.dir_x
-            self.astronauta.y += self.astronauta.dir_y
-
-
 
     def gameImage(self):
 
@@ -236,9 +227,7 @@ class Game():
         '''
             Função responsável por desenhar na tela do jogo
         '''
-
-        self.screen.fill((128,128,128))
-
+        
         # desenha o astronauta
         pygame.draw.circle(self.screen, (0, 0, 0), (self.astronauta.x, self.astronauta.y), self.astronauta.raio)
 
