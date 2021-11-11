@@ -48,7 +48,7 @@ class Game():
         Classe reponsável por gerenciar o jogo
     '''
 
-    def __init__(self, screenSize = (1280, 960), fps=100, title='alfa', icon=None):
+    def __init__(self, screenSize = (1024, 768), fps=100, title='alfa', icon=None):
 
         self.gameRunning = True
 
@@ -68,15 +68,15 @@ class Game():
 
         self.obstaculo_1.x = self.screenSize[0] / 2
         self.obstaculo_1.y = 0
-        self.obstaculo_1.largura = 40
-        self.obstaculo_1.altura = 260
+        self.obstaculo_1.largura = 20
+        self.obstaculo_1.altura = 230
 
         # Define o obstaculo_2 como objeto da classe Objeto
          
         self.obstaculo_2 = Objeto()
 
-        self.obstaculo_2.largura = 40
-        self.obstaculo_2.altura = 480
+        self.obstaculo_2.largura = 20
+        self.obstaculo_2.altura = 400
         self.obstaculo_2.x = self.screenSize[0] / 2
         self.obstaculo_2.y = self.screenSize[1] - self.obstaculo_2.altura
 
@@ -134,7 +134,6 @@ class Game():
                 self.gameEvent(event)
 
             self.gameUpdate()
-            self.gameImage()
             self.gameRender()
 
             pygame.display.update()
@@ -179,24 +178,16 @@ class Game():
         rectobstaculo_1 = pygame.Rect((self.obstaculo_1.x, self.obstaculo_1.y, self.obstaculo_1.largura, self.obstaculo_1.altura))
         rectobstaculo_2 = pygame.Rect((self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
 
-        pygame.draw.rect(self.screen, (255, 0, 0), rectastronauta)
-
-        # desenha o objeto_1
-        pygame.draw.rect(self.screen, (255, 255, 255), (self.obstaculo_1.x, self.obstaculo_1.y, self.obstaculo_1.largura, self.obstaculo_1.altura))
-
-        # desenha a objeto_2
-        pygame.draw.rect(self.screen, (255, 255, 255), (self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
-
         if self.astronauta.last_vel_x != self.astronauta.vel_x or self.astronauta.last_vel_y != self.astronauta.vel_y:
 
             # verifica se o astronauta colidiu com o obstáculo
             if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2)):
-                self.astronauta.vel_x = -.5 * self.astronauta.vel_x
+                self.astronauta.vel_x = -.75 * self.astronauta.vel_x
                 self.astronauta.last_vel_x = self.astronauta.vel_x
 
             # verifica as colisões do astronauta no obstáculo (reverte a velocidade_x se ocorrer colisão, ou seja, faz um espelhamento em relação a horizontal)
             if(self.astronauta.x >= self.screenSize[0] - 2 * self.astronauta.raio or self.astronauta.x <= 0 + 2 * self.astronauta.raio):
-                self.astronauta.vel_x = -.5 * self.astronauta.vel_x
+                self.astronauta.vel_x = -.75 * self.astronauta.vel_x
                 self.astronauta.last_vel_x = self.astronauta.vel_x
 
         # if(astronauta.y >= screenSize[1] - astronauta.raio):
@@ -215,13 +206,6 @@ class Game():
             self.astronauta.dir_x = self.astronauta.dir_x / tmp_normal
             self.astronauta.dir_y = self.astronauta.dir_y / tmp_normal
 
-    def gameImage(self):
-
-        '''
-            Função responsável por colocar as imagens dos objetos
-            na tela do jogo
-        '''
-
     def gameRender(self):
 
         '''
@@ -238,14 +222,11 @@ class Game():
         pygame.draw.rect(self.screen, (255, 255, 255), (self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
        
         # desenha uma linha indicando a direção
-        pygame.draw.line( 
-                            self.screen, 
-                            (255, 255, 255), 
-                            (self.astronauta.x, self.astronauta.y), 
-                            (
-                                (self.astronauta.x + self.astronauta.dir_x * self.astronauta.raio * 3), 
-                                (self.astronauta.y + self.astronauta.dir_y * self.astronauta.raio * 3))
-                            )
+        pygame.draw.line(self.screen, (255, 255, 255), (self.astronauta.x, self.astronauta.y), 
+            (
+                (self.astronauta.x + self.astronauta.dir_x * self.astronauta.raio * 3), 
+                (self.astronauta.y + self.astronauta.dir_y * self.astronauta.raio * 3)
+            ))
     
         # Imagem do canhão
         canhão_largura, canhão_altura = 100, 100
