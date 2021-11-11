@@ -60,7 +60,10 @@ class Game():
         self.initGame() # inicializa o jogo
 
         # ângulo de abertura do canhão (°)
-        self.alfa = 60 * np.pi / 180
+        self.alfa = 30 * np.pi / 180
+
+        # gravidade (m/s²)
+        self.g = 9.80665 / (100 ** 2)
 
         # Define o obstaculo_1 como objeto da classe Objeto 
 
@@ -68,14 +71,14 @@ class Game():
 
         self.obstaculo_1.x = self.screenSize[0] / 2
         self.obstaculo_1.y = 0
-        self.obstaculo_1.largura = 20
+        self.obstaculo_1.largura = 50
         self.obstaculo_1.altura = 230
 
         # Define o obstaculo_2 como objeto da classe Objeto
          
         self.obstaculo_2 = Objeto()
 
-        self.obstaculo_2.largura = 20
+        self.obstaculo_2.largura = 50
         self.obstaculo_2.altura = 400
         self.obstaculo_2.x = self.screenSize[0] / 2
         self.obstaculo_2.y = self.screenSize[1] - self.obstaculo_2.altura
@@ -163,9 +166,6 @@ class Game():
             Função responsável por atualizar a lógica do jogo
         '''
 
-        # gravidade (m/s²)
-        self.g = (1 / self.deltaTime ** 2) * 0.11
-
         # movimento horizontal
         self.astronauta.x = self.astronauta.x + self.astronauta.vel_x * self.deltaTime
 
@@ -182,12 +182,12 @@ class Game():
 
             # verifica se o astronauta colidiu com o obstáculo
             if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2)):
-                self.astronauta.vel_x = -.75 * self.astronauta.vel_x
+                self.astronauta.vel_x = -.5 * self.astronauta.vel_x
                 self.astronauta.last_vel_x = self.astronauta.vel_x
 
             # verifica as colisões do astronauta no obstáculo (reverte a velocidade_x se ocorrer colisão, ou seja, faz um espelhamento em relação a horizontal)
             if(self.astronauta.x >= self.screenSize[0] - 2 * self.astronauta.raio or self.astronauta.x <= 0 + 2 * self.astronauta.raio):
-                self.astronauta.vel_x = -.75 * self.astronauta.vel_x
+                self.astronauta.vel_x = -.5 * self.astronauta.vel_x
                 self.astronauta.last_vel_x = self.astronauta.vel_x
 
         # if(astronauta.y >= screenSize[1] - astronauta.raio):
@@ -205,7 +205,7 @@ class Game():
 
             self.astronauta.dir_x = self.astronauta.dir_x / tmp_normal
             self.astronauta.dir_y = self.astronauta.dir_y / tmp_normal
-
+    
     def gameRender(self):
 
         '''
