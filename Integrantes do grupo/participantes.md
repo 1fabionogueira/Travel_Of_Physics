@@ -1,7 +1,7 @@
-# Colaboradores do Projeto
+# Integrantes do Grupo 4
 
-* Fábio F. G. Nogueira
-* João Marcos B. L.
-* Lucas L. Lubrano
-* Pedro A. Camargo
+* Fábio Franchi Gomes Nogueira
+* João Marcos Brandão Lopes
+* Lucas Lubrano Melo
+* Pedro Augusto de Camargo
 * Victor Campos
