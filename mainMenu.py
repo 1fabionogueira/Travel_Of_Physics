@@ -1,3 +1,5 @@
+from Game import Game
+
 import pygame, sys
 mainClock = pygame.time.Clock()
 from pygame.locals import *

@@ -62,8 +62,7 @@ class Game():
         self.title = title # Nome do jogo
         self.icon = icon # ícone do jogo
 
-        # Define o obstaculo_1 como objeto da classe Objeto 
-
+        # Define o obstaculo_1 como objeto da classe Objeto
         self.obstaculo_1 = Objeto()
 
         self.obstaculo_1.x = self.screenSize[0] / 2
@@ -72,7 +71,6 @@ class Game():
         self.obstaculo_1.altura = 230
 
         # Define o obstaculo_2 como objeto da classe Objeto
-         
         self.obstaculo_2 = Objeto()
 
         self.obstaculo_2.largura = 50
@@ -81,7 +79,6 @@ class Game():
         self.obstaculo_2.y = self.screenSize[1] - self.obstaculo_2.altura
 
         # Define-se astronauta como objeto da classe Astronauta
-
         self.astronauta = Astronauta()
 
         self.astronauta.x_inicial = 70
@@ -115,7 +112,7 @@ class Game():
 
         pygame.font.init()
         self.gameFont = pygame.font.SysFont("Arial", 35)
-    
+
     def gameMain(self):
 
         '''
@@ -132,10 +129,7 @@ class Game():
 
             self.gameUpdate()
             self.gameRender()
-            self.quedaLivre()
-            self.lancamentoHorizontal()
-            self.lancamentoVertical()
-            self.lancamentoObliquo()
+            self.gameImage()
 
             pygame.display.update()
 
@@ -154,43 +148,136 @@ class Game():
 
             if(event.key == pygame.K_ESCAPE):
                 self.gameRunning = False
+    '''
+        def gameReset(self):
 
-    def gameReset(self):
-
-        self.start_message = self.gameFont.render("Aperte a tecla 'E' para iniciar o lançamento", 1, (255,255,255))
-        self.screen.blit(self.start_message, (self.screenSize[0] / 2 - self.start_message.get_width() , self.screenSize[1] / 3))
-
-        keys = pygame.key.get_pressed()
-
-        if(keys[pygame.K_e]):
-            self.astronauta.x_inicial = 70
-            self.astronauta.y_inicial = self.screenSize[1] - 70
-
-            self.astronauta.x = self.astronauta.x_inicial
-            self.astronauta.y = self.astronauta.y_inicial
-
-            self.astronauta.alfa = 45 * (np.pi / 180)
-
-            self.astronauta.g = 9.80655
-
-            self.astronauta.vel_inicial = (1 / self.fps) * 108
-            self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
-            self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
-        
-        else:
-            pass
-
+            self.start_message = self.gameFont.render("Aperte a tecla 'E' para iniciar o lançamento", 1, (255,255,255))
+            self.screen.blit(self.start_message, (self.screenSize[0] / 2 - self.start_message.get_width() , self.screenSize[1] / 3))
+    '''
     def quedaLivre(self):
-        pass
+         # Parâmetros para o obstáculo 1
+
+        self.obstaculo_1.x = self.screenSize[0] / 2
+        self.obstaculo_1.y = 0
+        self.obstaculo_1.largura = 50
+        self.obstaculo_1.altura = 230
+
+        # Parâmetros para o obstáculo 2
+
+        self.obstaculo_2.largura = 50
+        self.obstaculo_2.altura = 400
+        self.obstaculo_2.x = self.screenSize[0] / 2
+        self.obstaculo_2.y = self.screenSize[1] - self.obstaculo_2.altura
+
+        # Parâmetros para o Foguete 
+        self.astronauta.x_inicial = 70
+        self.astronauta.y_inicial = self.screenSize[1] - 70
+
+        self.astronauta.x = self.astronauta.x_inicial
+        self.astronauta.y = self.astronauta.y_inicial
+
+        self.astronauta.alfa = 45 * (np.pi / 180)
+
+        self.astronauta.vel_inicial = (1 / self.fps) * 108
+        self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
+        self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
+
+        self.gameUpdate(),  self.gameRender(), self.gameImage()
 
     def lancamentoHorizontal(self):
-        pass
+        
+         # Parâmetros para o obstáculo 1
+
+        self.obstaculo_1.x = self.screenSize[0] / 2
+        self.obstaculo_1.y = 0
+        self.obstaculo_1.largura = 50
+        self.obstaculo_1.altura = 230
+
+        # Parâmetros para o obstáculo 2
+
+        self.obstaculo_2.largura = 50
+        self.obstaculo_2.altura = 400
+        self.obstaculo_2.x = self.screenSize[0] / 2
+        self.obstaculo_2.y = self.screenSize[1] - self.obstaculo_2.altura
+
+        # Parâmetros para o Foguete 
+        self.astronauta.x_inicial = 70
+        self.astronauta.y_inicial = self.screenSize[1] - 70
+
+        self.astronauta.x = self.astronauta.x_inicial
+        self.astronauta.y = self.astronauta.y_inicial
+
+        self.astronauta.alfa = 45 * (np.pi / 180)
+
+        self.astronauta.vel_inicial = (1 / self.fps) * 108
+        self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
+        self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
+
+        self.gameUpdate(),  self.gameRender(), self.gameImage()
 
     def lancamentoVertical(self):
-        pass
+
+         # Parâmetros para o obstáculo 1
+
+        self.obstaculo_1.x = self.screenSize[0] / 2
+        self.obstaculo_1.y = 0
+        self.obstaculo_1.largura = 50
+        self.obstaculo_1.altura = 230
+
+        # Parâmetros para o obstáculo 2
+
+        self.obstaculo_2.largura = 50
+        self.obstaculo_2.altura = 400
+        self.obstaculo_2.x = self.screenSize[0] / 2
+        self.obstaculo_2.y = self.screenSize[1] - self.obstaculo_2.altura
+
+        # Parâmetros para o Foguete 
+        self.astronauta.x_inicial = 70
+        self.astronauta.y_inicial = self.screenSize[1] - 70
+
+        self.astronauta.x = self.astronauta.x_inicial
+        self.astronauta.y = self.astronauta.y_inicial
+
+        self.astronauta.alfa = 45 * (np.pi / 180)
+
+        self.astronauta.vel_inicial = (1 / self.fps) * 108
+        self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
+        self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
+
+        self.gameUpdate(),  self.gameRender(), self.gameImage()
 
     def lancamentoObliquo(self):
-        pass
+
+        # Parâmetros para o obstáculo 1
+
+        self.obstaculo_1.x = self.screenSize[0] / 2
+        self.obstaculo_1.y = 0
+        self.obstaculo_1.largura = 50
+        self.obstaculo_1.altura = 230
+
+        # Parâmetros para o obstáculo 2
+
+        self.obstaculo_2.largura = 50
+        self.obstaculo_2.altura = 400
+        self.obstaculo_2.x = self.screenSize[0] / 2
+        self.obstaculo_2.y = self.screenSize[1] - self.obstaculo_2.altura
+
+        # Parâmetros para o Foguete 
+        self.astronauta.x_inicial = 70
+        self.astronauta.y_inicial = self.screenSize[1] - 70
+
+        self.astronauta.x = self.astronauta.x_inicial
+        self.astronauta.y = self.astronauta.y_inicial
+
+        self.astronauta.alfa = 45 * (np.pi / 180)
+
+        self.astronauta.vel_inicial = (1 / self.fps) * 108
+        self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
+        self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
+
+        self.gameUpdate(self.obstaculo_1, self.obstaculo_2, self.astronauta) 
+        self.gameRender()
+        self.gameImage()
 
     def gameUpdate(self):
 
@@ -198,10 +285,10 @@ class Game():
             Função responsável por atualizar a lógica do jogo
         '''
 
-        # movimento horizontal
+        # movimento na horizontal (M.R.U)
         self.astronauta.x = self.astronauta.x + self.astronauta.vel_x * self.deltaTime
 
-        # movimento vertical 
+        # movimento na vertical (M.U.V)
         self.astronauta.vel_y = self.astronauta.vel_y - self.astronauta.g * self.deltaTime
         self.astronauta.y = self.astronauta.y - self.astronauta.vel_y * self.deltaTime
 
@@ -214,9 +301,11 @@ class Game():
 
             # verifica se o astronauta colidiu com o obstáculo
             if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2)):
-                self.defeat_message = self.gameFont.render("Bateste a nave :(", 1, (255,255,255))
-                self.screen.blit(self.defeat_message, (self.screenSize[0] / 2 - self.defeat_message.get_width() , self.screenSize[1] / 3))
-                self.gameReset()
+                self.pygame.quit()
+
+                #self.defeat_message = self.gameFont.render("Bateste a nave :(", 1, (255,255,255))
+                #self.screen.blit(self.defeat_message, (self.screenSize[0] / 2 - self.defeat_message.get_width() , self.screenSize[1] / 3))
+                #self.gameReset()
 
         # salva a direção que o astronauta está indo
         self.astronauta.dir_x = self.astronauta.vel_x
@@ -249,11 +338,13 @@ class Game():
             (
                 (self.astronauta.x + self.astronauta.dir_x * self.astronauta.raio * 3), 
                 (self.astronauta.y + self.astronauta.dir_y * self.astronauta.raio * 3)
-            ))
+            ))        
+
+    def gameImage(self):
 
         # Imagem do canhão
         canhão_largura, canhão_altura = 100, 100
-        canhão_image = pygame.image.load(os.path.join('assets', 'cannon.png'))
+        canhão_image = pygame.image.load(os.path.join('assets/cannon.png'))
         canhão = pygame.transform.scale(canhão_image, (canhão_largura, canhão_altura))
 
         self.screen.blit(canhão, (0, self.screenSize[1] - canhão_altura))
