@@ -1,164 +1,191 @@
-from Game import Game
-
-import pygame, sys
-mainClock = pygame.time.Clock()
+import pygame
+import sys
 from pygame.locals import *
-pygame.init()
-pygame.display.set_caption('Menu')
-screen = pygame.display.set_mode((1024, 768), 0, 32)
+from lancamentoVertical import LancamentoVertical
+from lancamentoHorizontal import LancamentoHorizontal
+from lancamentoObliquo import LancamentoObliquo
 
-font = pygame.font.SysFont(None, 20)
+class MainMenu():
 
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, 1, color)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
-    
-def draw_button(text, font, color, surface, x, y):
-    butobj = font.render(text, 1, color)
-    butrect = butobj.get_rect()
-    butrect.center = (x, y)
-    surface.blit(butobj, butrect)
+    def __init__(self, screenSize = (1024, 768), fps=100, title='Menu', icon=None):
+        self.menuRunning = True
 
-click = False
+        self.screenSize = screenSize # Define o Tamanho da tela
+        self.fps = fps # Quantidade de frames por segundo
+        self.title = title # Nome do jogo
+        self.icon = icon # ícone do jogo
 
-def main_menu():
-    while True:
+        self.initMenu()
 
-        screen.fill((128, 128, 128))
-        draw_text('Menu Principal', font, (255, 255, 255), screen, 20, 20)
+    def initMenu(self):
+        self.screen = pygame.display.set_mode(self.screenSize)
+        pygame.display.set_caption(self.title)
+
+        if(self.icon != None):
+            pygame.display.set_icon(self.icon)
         
-        mx, my = pygame.mouse.get_pos()
+        self.menuClock = pygame.time.Clock()
 
-        button_1 = pygame.Rect(50, 100, 200, 50)
-        button_2 = pygame.Rect(50, 200, 200, 50)
-        button_3 = pygame.Rect(50, 300, 200, 50)
-        button_4 = pygame.Rect(50, 400, 200, 50)
-        button_5 = pygame.Rect(50, 500, 200, 50)
-    
-        if button_1.collidepoint((mx, my)):
-            if click:
-                fase1()
-        if button_2.collidepoint((mx, my)):
-            if click:
-                fase2()
-        if button_3.collidepoint((mx, my)):
-            if click:
-                fase3()
-        if button_4.collidepoint((mx, my)):
-            if click:
-                fase4()
-        if button_5.collidepoint((mx, my)):
-            if click:
-                options()
-        pygame.draw.rect(screen, (255, 128, 34), button_1)
-        pygame.draw.rect(screen, (255, 128, 34), button_2)
-        pygame.draw.rect(screen, (255, 128, 34), button_3)
-        pygame.draw.rect(screen, (255, 128, 34), button_4)
-        pygame.draw.rect(screen, (255, 128, 34), button_5)
-        draw_text('Fase 1: Queda Livre', font, (255, 255, 255), screen, 50, 100)
-        draw_text('Fase 2: Lançamento Vertical', font, (255, 255, 255), screen, 50, 200)
-        draw_text('Fase 3: Lançamento Horizontal', font, (255, 255, 255), screen, 50, 300)
-        draw_text('Fase 4: Lançamento Oblíquo', font, (255, 255, 255), screen, 50, 400)
-        draw_text('Opções', font, (255, 255, 255), screen, 50, 500)
+        pygame.font.init()
+        self.menuFont = pygame.font.SysFont("Roboto", 35)
 
-        click = False
+    def draw_text(self, text, font, color, surface, x, y):
+        textobj = font.render(text, 1, color)
+        textrect = textobj.get_rect()
+        textrect.topleft = (x, y)
+        surface.blit(textobj, textrect)
+        
+    def draw_button(self, text, font, color, surface, x, y):
+        butobj = font.render(text, 1, color)
+        butrect = butobj.get_rect()
+        butrect.center = (x, y)
+        surface.blit(butobj, butrect)
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
+    def main_menu(self):
+        while self.menuRunning:
+
+            self.menuClock.tick(self.fps)
+            self.screen.fill((15, 15, 15))
+
+            for event in pygame.event.get():
+                self.menuEvent(event)
+
+            self.menuRender()
+            self.draw_text('Menu Principal', self.menuFont, (255, 255, 255), self.screen, 20, 20)
+            
+            mx, my = pygame.mouse.get_pos()
+        
+            if self.button_1.collidepoint((mx, my)):
+                if self.click:
+                    self.fase1(event)
+
+            if self.button_2.collidepoint((mx, my)):
+                if self.click:
+                    self.fase2(event)
+
+            if self.button_3.collidepoint((mx, my)):
+                if self.click:
+                    self.fase3(event)
+
+            if self.button_4.collidepoint((mx, my)):
+                if self.click:
+                    self.fase4(event)
+
+            self.click = False
+            
+            pygame.display.update()
+
+        pygame.quit()
+
+    def menuEvent(self, event):
+        if(event.type == pygame.QUIT):
+            self.menuRunning = False
+
+        if(event.type == pygame.KEYDOWN):
+            if(event.type == pygame.K_ESCAPE):
+                self.menuRunning = False
+
+        if(event.type == MOUSEBUTTONDOWN):
+            if event.button == 1:
+                self.click = True
+
+    '''
+    def fase1(self, event):
+        running = True
+        while running:
+
+            for event in pygame.event.get():
+                if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
-        
-        pygame.display.update()
-        mainClock.tick(60)
 
-def fase1():
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        draw_text('Fase 1: Queda Livre', font, (255, 255, 255), screen, 20, 20)
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
-        pygame.display.update()
-        mainClock.tick(60)
+            pygame.display.update()
+            self.menuClock.tick(self.fps)
+    '''
+            
+    
+    def fase2(self, event):
+        running = True
+        while running:
 
+            lancamento_vertical = LancamentoVertical()
+            lancamento_vertical.initGame()
+            lancamento_vertical.gameMain()
 
-def fase2():
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        draw_text('Fase 2: Lançamento Vertical', font, (255, 255, 255), screen, 20, 20)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
-        pygame.display.update()
-        mainClock.tick(60)
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
 
-def fase3():
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        draw_text('Fase 3: Lançamento Horizontal', font, (255, 255, 255), screen, 20, 20)
+            pygame.display.update()
+            self.menuClock.tick(self.fps)
+    
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
-        pygame.display.update()
-        mainClock.tick(60)
+            
+    
+    def fase3(self, event):
+        running = True
+        while running:
+            
+            lancamento_horizontal = LancamentoHorizontal()
+            lancamento_horizontal.initGame()
+            lancamento_horizontal.gameMain()
 
-def fase4():
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        draw_text('Fase 4: Lançamento Oblíquo', font, (255, 255, 255), screen, 20, 20)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
-        pygame.display.update()
-        mainClock.tick(60)
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
 
-def options():
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        draw_text('Opções', font, (255, 255, 255), screen, 20, 20)
+            pygame.display.update()
+            self.menuClock.tick(self.fps)
+    
+    def fase4(self, event):
+        running = True
+        while running:
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
-        pygame.display.update()
-        mainClock.tick(60)
+            lancamento_obliquo = LancamentoObliquo()
+            lancamento_obliquo.initGame()
+            lancamento_obliquo.gameMain()
 
-main_menu()
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
+
+            pygame.display.update()
+            self.menuClock.tick(self.fps)
+
+    def menuRender(self):
+        self.button_1 = pygame.Rect(40, 100, 400, 50)
+        self.button_2 = pygame.Rect(40, 200, 400, 50)
+        self.button_3 = pygame.Rect(40, 300, 400, 50)
+        self.button_4 = pygame.Rect(40, 400, 400, 50)
+
+        pygame.draw.rect(self.screen, (30, 30, 160), self.button_1)
+        pygame.draw.rect(self.screen, (30, 30, 160), self.button_2)
+        pygame.draw.rect(self.screen, (30, 30, 160), self.button_3)
+        pygame.draw.rect(self.screen, (30, 30, 160), self.button_4)
+
+        self.draw_text('Fase 1 - Queda Livre', self.menuFont, (255, 255, 255), self.screen, 50, 112.5)
+        self.draw_text('Fase 2 - Lançamento Vertical', self.menuFont, (255, 255, 255), self.screen, 50, 212.5)
+        self.draw_text('Fase 3 - Lançamento Horizontal', self.menuFont, (255, 255, 255), self.screen, 50, 312.5)
+        self.draw_text('Fase 4 - Lançamento Oblíquo', self.menuFont, (255, 255, 255), self.screen, 50, 412.5)
+
+menu = MainMenu()
+menu.main_menu()
