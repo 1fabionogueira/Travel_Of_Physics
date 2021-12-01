@@ -8,8 +8,8 @@
 
 ### Integrantes do projeto:
 
-* Fábio Franchi Gomes Nogueira - \b{Código}
-* João Marcos Brandão Lopes - \b{Documentação}
-* Lucas Lubrano Melo - \b{Código}
-* Pedro Augusto de Camargo - \b{Documentação}
-* Victor Campos - \b{Código}
+* Fábio Franchi Gomes Nogueira - Código
+* João Marcos Brandão Lopes - Documentação
+* Lucas Lubrano Melo - Código
+* Pedro Augusto de Camargo - Documentação
+* Victor Campos - Código
