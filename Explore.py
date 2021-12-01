@@ -4,13 +4,16 @@ from Game import Objeto, Foguete, Game, Jogador
 
 class Explorar():
 
+    '''
+        Define a classe da fase "Explore"
+    '''
+
     def __init__(self):    
 
         self.jogo = Game()
         self.obstaculo_1 = Objeto()
         self.obstaculo_2 = Objeto()
         self.obstaculo_3 = Objeto()
-        self.obstaculo_4 = Objeto()
         self.astronauta = Foguete()
         self.jogador_1 = Jogador()
         self.jogador_2 = Jogador()
@@ -20,69 +23,77 @@ class Explorar():
         self.jogador_6 = Jogador()
         self.jogador_7 = Jogador()
         self.jogador_8 = Jogador()
+        self.jogador_9 = Jogador()
 
         self.movimento_iniciado = False
 
+        # Define os parâmetros da Barra Preta
         self.jogador_1.x = 1150
         self.jogador_1.y = 100
         self.jogador_1.largura = 50
         self.jogador_1.altura = 200
 
+        # Define os parâmetros da Tecla A
         self.jogador_2.x = 1150
         self.jogador_2.y = 30
         self.jogador_2.largura = 50
         self.jogador_2.altura = 50
 
+        # Define os parâmetros da Tecla D
         self.jogador_3.x = 1150
         self.jogador_3.y = 320
         self.jogador_3.largura = 50
         self.jogador_3.altura = 50
 
+        # Define os parâmetros da Barra Amarela
         self.jogador_4.x = 1150
         self.jogador_4.y = 100
         self.jogador_4.largura = 50
         self.jogador_4.altura = 10
 
+        # Define os parâmetros da Tecla Z
         self.jogador_5.x = 1000
         self.jogador_5.y = 30
         self.jogador_5.largura = 50
         self.jogador_5.altura = 50
 
+        # Define os parâmetros da Barra Preta
         self.jogador_6.x = 1000
         self.jogador_6.y = 100
         self.jogador_6.largura = 50
         self.jogador_6.altura = 200
 
+        # Define os parâmetros da Barra Amarela
         self.jogador_7.x = 1000
         self.jogador_7.y = 100
         self.jogador_7.largura = 50
         self.jogador_7.altura = 10
 
+        # Define os parâmetros da Tecla C
         self.jogador_8.x = 1000
         self.jogador_8.y = 320
         self.jogador_8.largura = 50
         self.jogador_8.altura = 50
 
-        self.obstaculo_1.x = self.jogo.screenSize[0] / 2
+        # Define os parâmetros do Obstáculo 1
+        self.obstaculo_1.x = self.jogo.screenSize[0] / 2 - 400
         self.obstaculo_1.y = 0
         self.obstaculo_1.largura = 50
-        self.obstaculo_1.altura = 230
+        self.obstaculo_1.altura = 200
 
+        # Define os parâmetros do Obstáculo 2
         self.obstaculo_2.largura = 50
-        self.obstaculo_2.altura = 400
-        self.obstaculo_2.x = self.jogo.screenSize[0] / 2
+        self.obstaculo_2.altura = 450
+        self.obstaculo_2.x = self.jogo.screenSize[0] / 2 - 200
         self.obstaculo_2.y = self.jogo.screenSize[1] - self.obstaculo_2.altura
 
+        # Define os parâmetros do Obstáculo 3
         self.obstaculo_3.largura = 50
-        self.obstaculo_3.altura = 330
-        self.obstaculo_3.x = 662
+        self.obstaculo_3.altura = 200
+        self.obstaculo_3.x = self.jogo.screenSize[0] / 2 
         self.obstaculo_3.y = 0
 
-        self.obstaculo_4.largura = 50
-        self.obstaculo_4.altura = 506
-        self.obstaculo_4.x = 662
-        self.obstaculo_4.y = 430
-
+        # Define os parâmetros do Astronauta
         self.astronauta.x_inicial = 70
         self.astronauta.y_inicial = self.jogo.screenSize[1] - 70
 
@@ -133,12 +144,9 @@ class Explorar():
 
             self.gameUpdate()
             self.gameRender()
-            #self.jogo.explore_Image()
             self.jogo.gameImage()
 
             pygame.display.update()
-
-        pygame.quit()
 
     def gameEvent(self, event):
 
@@ -153,7 +161,7 @@ class Explorar():
 
             if(event.key == pygame.K_ESCAPE):
                 self.jogo.gameRunning = False
-                
+
             elif(event.key == pygame.K_SPACE):
                 self.movimento_iniciado =  True
             
@@ -183,12 +191,21 @@ class Explorar():
                     self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
                     self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
                 
-        if self.jogador_4.altura >  self.jogador_1.altura:
+            if (self.jogador_4.altura <  10):
+                self.jogador_4.altura = 10
+                self.astronauta.vel_inicial = (1 / self.jogo.fps) * 100 - 0.9
+    
+            if (self.jogador_4.altura >  self.jogador_1.altura):
                 self.jogador_4.altura = 10
                 self.astronauta.vel_inicial = (1 / self.jogo.fps) * 100 - 0.9
 
-        if (self.jogador_7.altura >  self.jogador_6.altura):
+            if (self.jogador_7.altura <  10):
                 self.jogador_7.altura = 10
+                self.astronauta.alfa = 30 * (np.pi / 180)
+
+            if (self.jogador_7.altura >  self.jogador_1.altura):
+                self.jogador_7.altura = 10
+                self.astronauta.alfa = 30 * (np.pi / 180)
 
     def gameUpdate(self):
 
@@ -214,12 +231,11 @@ class Explorar():
         rectobstaculo_1 = pygame.Rect((self.obstaculo_1.x, self.obstaculo_1.y, self.obstaculo_1.largura, self.obstaculo_1.altura))
         rectobstaculo_2 = pygame.Rect((self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
         rectobstaculo_3 = pygame.Rect((self.obstaculo_3.x, self.obstaculo_3.y, self.obstaculo_3.largura, self.obstaculo_3.altura))
-        rectobstaculo_4 = pygame.Rect((self.obstaculo_4.x, self.obstaculo_4.y, self.obstaculo_4.largura, self.obstaculo_4.altura))
-
+        
         if self.astronauta.last_vel_x != self.astronauta.vel_x or self.astronauta.last_vel_y != self.astronauta.vel_y:
 
             # verifica se o astronauta colidiu com o obstáculo
-            if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_3) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_4)):
+            if(pygame.Rect.colliderect(rectastronauta, rectobstaculo_1) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_2) or pygame.Rect.colliderect(rectastronauta, rectobstaculo_3)):
                 self.movimento_iniciado = False
                 self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
                 self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
@@ -237,7 +253,7 @@ class Explorar():
             self.astronauta.dir_x = self.astronauta.dir_x / tmp_normal
             self.astronauta.dir_y = self.astronauta.dir_y / tmp_normal
 
-        if self.astronauta.x > 1024 or self.astronauta.x < 0 or self.astronauta.y < 0 or self.astronauta.y > 768:
+        if self.astronauta.x > self.jogo.screenSize[0] or self.astronauta.x < 0 or self.astronauta.y < 0 or self.astronauta.y > self.jogo.screenSize[1]:
              self.movimento_iniciado = False
              self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
              self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
@@ -278,6 +294,7 @@ class Explorar():
         self.jogo.draw_text("- Vel.", self.textoFont, (BLACK), self.jogo.screen, self.jogador_3.x + 60, 42.5 + 290)
         self.jogo.draw_text("+ Âng.", self.textoFont, (BLACK), self.jogo.screen, self.jogador_5.x + 60, 42.5)
         self.jogo.draw_text("- Âng.", self.textoFont, (BLACK), self.jogo.screen, self.jogador_8.x + 60, 42.5 + 290)
+        self.jogo.draw_text("Aperte 'Espaço' para começar", self.teclaFont, (BLACK), self.jogo.screen, 800, 650)
 
         # desenha o astronauta
         pygame.draw.circle(self.jogo.screen, (PURPLE), (self.astronauta.x, self.astronauta.y), self.astronauta.raio)
@@ -291,12 +308,9 @@ class Explorar():
         # desenha a objeto_3
         pygame.draw.rect(self.jogo.screen, (BLACK), (self.obstaculo_3.x, self.obstaculo_3.y, self.obstaculo_3.largura, self.obstaculo_3.altura))
 
-        # desenha a objeto_4
-        pygame.draw.rect(self.jogo.screen, (BLACK), (self.obstaculo_4.x, self.obstaculo_4.y, self.obstaculo_4.largura, self.obstaculo_4.altura))
-       
         # desenha uma linha indicando a direção
         pygame.draw.line(self.jogo.screen, (WHITE), (self.astronauta.x, self.astronauta.y), 
             (
                 (self.astronauta.x + self.astronauta.dir_x * self.astronauta.raio * 3), 
                 (self.astronauta.y + self.astronauta.dir_y * self.astronauta.raio * 3)
-            ))               
+            ))

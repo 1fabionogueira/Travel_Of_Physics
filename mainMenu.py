@@ -3,10 +3,15 @@ from Explore import Explorar
 from Angulo import Angulo
 from VariaVelocidade import VariaVelocidade
 from VelAngulo import VelAngulo
+from os.path import join 
 
 class MainMenu():
 
-    def __init__(self, screenSize = (1280, 768), fps=100, title='Menu', icon=None):
+    '''
+        Cria a classe do MainMenu e configura os principais parâmetros do jogo, como o tamanho da tela, fps, titulo e ícone
+    '''
+
+    def __init__(self, screenSize = (1280, 720), fps=100, title='Menu', icon=None):
         self.menuRunning = True
 
         self.screenSize = screenSize # Define o Tamanho da tela
@@ -17,6 +22,12 @@ class MainMenu():
         self.initMenu()
 
     def initMenu(self):
+
+        '''
+            Função responsável por inicializar e configurar a tela do jogo,
+            essa função não possui parâmetros
+        '''
+
         self.screen = pygame.display.set_mode(self.screenSize)
         pygame.display.set_caption(self.title)
 
@@ -36,6 +47,10 @@ class MainMenu():
         surface.blit(textobj, textrect)
 
     def main_menu(self):
+
+        '''
+            Loop principal do mainMenu
+        '''
         while self.menuRunning:
 
             self.menuClock.tick(self.fps)
@@ -71,91 +86,80 @@ class MainMenu():
         pygame.quit()
 
     def menuEvent(self, event):
+
+        '''
+            Função responsável por gerenciar os eventos do display event 
+        '''
+
         if(event.type == pygame.QUIT):
-            self.menuRunning = False
+            pygame.quit()
 
         if(event.type == pygame.KEYDOWN):
             if(event.type == pygame.K_ESCAPE):
-                self.menuRunning = False
+                pygame.quit()
 
         if(event.type == pygame.MOUSEBUTTONDOWN):
             if event.button == 1:
                 self.click = True
 
-    
     def fase1(self):
 
-        running = True
-        while running:
+        '''
+            função responsável por iniciar a fase 'Variando a Velocidade'
+        '''
 
-            variavelocidade = VariaVelocidade()
-            variavelocidade.initGame()
-
-            while (variavelocidade.jogo.gameRunning == True):
-                variavelocidade.gameMain()
-            
-            running = False
-        
-        self.initMenu()
-        self.main_menu()
+        variavelocidade = VariaVelocidade()
+        variavelocidade.initGame()
+        variavelocidade.gameMain()
 
     def fase2(self):
 
-        running = True
-        while running:
-            
-            angulo = Angulo()
-            angulo.initGame()
+        '''
+            função responsável por iniciar a fase 'Variando o Ângulo'
+        '''
 
-            while (angulo.jogo.gameRunning == True):
-                angulo.gameMain()
+        angulo = Angulo()
+        angulo.initGame()
+        angulo.gameMain()
 
-            running = False
-        
-        menu.initMenu()
-        menu.main_menu()
-    
     def fase3(self):
 
-        running = True
-        while running:
+        '''
+            função responsável por iniciar a fase 'Velocidade e Ângulo'
+        '''
 
-            velangulo = VelAngulo()
-            velangulo.initGame()
+        velangulo = VelAngulo()
+        velangulo.initGame()
+        velangulo.gameMain()
 
-            while (velangulo.jogo.gameRunning == True):
-                velangulo.gameMain()
-
-            running = False
-        
-        menu.initMenu()
-        menu.main_menu()
-        
     def fase4(self):
 
-        running = True
-        while running:
+        '''
+            função responsável por iniciar a fase 'Explore'
+        '''
 
-            explore = Explorar()
-            explore.initGame()
-
-            while (explore.jogo.gameRunning == True):
-                explore.gameMain()
-
-            running = False
-
-        menu.initMenu()
-        menu.main_menu()
+        explore = Explorar()
+        explore.initGame()
+        explore.gameMain()
 
     def menuRender(self):
+        
         '''
             Função responsável por renderizar os botões e textos do Main Menu
         '''
 
+        # Imagem de fundo
+        background_largura, background_altura = self.screenSize[0], self.screenSize[1]
+        background_image = pygame.image.load(join('assets/space.png'))
+        background = pygame.transform.scale(background_image, (background_largura, background_altura))
+
+        self.screen.blit(background,(0, 0))
+
+        YELLOW = (242, 210, 29)
         WHITE = (255, 255, 255)
         BLUEISH = (30, 30, 160)
 
-        menuPrincipal = self.titleFont.render('Travel Of Physics', 1, (WHITE))
+        menuPrincipal = self.titleFont.render('Travel Of Physics', 1, (YELLOW))
         Fase1 = self.menuFont.render('Variando a Velocidade', 1, (WHITE))
         Fase2 = self.menuFont.render('Variando o Ângulo', 1, (WHITE))
         Fase3 = self.menuFont.render('Velocidade e Ângulo', 1, (WHITE))
@@ -171,7 +175,7 @@ class MainMenu():
         pygame.draw.rect(self.screen, (BLUEISH), self.button_3)
         pygame.draw.rect(self.screen, (BLUEISH), self.button_4)
 
-        self.draw_text('Travel Of Physics', self.titleFont, (WHITE), self.screen, (self.screenSize[0] - 2 * menuPrincipal.get_width()), 20)
+        self.draw_text('Travel Of Physics', self.titleFont, (YELLOW), self.screen, (self.screenSize[0] - 2 * menuPrincipal.get_width()), 20)
         self.draw_text('Variando a Velocidade', self.menuFont, (WHITE), self.screen, ((self.screenSize[0] / 2) - 0.5 * Fase1.get_width()), 212.5)
         self.draw_text('Variando o Ângulo', self.menuFont, (WHITE), self.screen, ((self.screenSize[0] / 2) - 0.5 * Fase2.get_width()), 312.5)
         self.draw_text('Velocidade e Ângulo', self.menuFont, (WHITE), self.screen, ((self.screenSize[0] / 2) - 0.5 * Fase3.get_width()), 412.5)

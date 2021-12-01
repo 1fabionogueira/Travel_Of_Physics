@@ -83,27 +83,13 @@ class Game():
     
     def gameImage(self):
 
+        '''
+            Função responsável por renderizar e colocar a imagem no jogo
+        '''
+
         # Imagem do canhão
         canhão_largura, canhão_altura = 100, 100
         canhão_image = load(join('assets/cannon.png'))
         canhão = scale(canhão_image, (canhão_largura, canhão_altura))
 
         self.screen.blit(canhão, (0, self.screenSize[1] - canhão_altura))
-
-    def variavelocidadeImage(self):
-
-        # Imagem de fundo
-        background_largura, background_altura = self.screenSize[0], self.screenSize[1]
-        background_image = load(join('assets/space.png'))
-        background = scale(background_image, (background_largura, background_altura))
-
-        self.screen.blit(background,(0, 0))
-
-    def angulo_Image(self):
-        pass
-
-    def velangulo_Image(self):
-        pass
-
-    def explore_Image(self):
-        pass

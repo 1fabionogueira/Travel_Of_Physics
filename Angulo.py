@@ -4,6 +4,10 @@ from Game import Objeto, Foguete, Game, Jogador
 
 class Angulo():
 
+    '''
+        Define a classe da fase "Variando o Ângulo"
+    '''
+
     def __init__(self):    
 
         self.jogo = Game()
@@ -17,43 +21,50 @@ class Angulo():
 
         self.movimento_iniciado = False
 
+        # Define os parâmetros da Barra Preta
         self.jogador_1.x = 1150
         self.jogador_1.y = 100
         self.jogador_1.largura = 50
         self.jogador_1.altura = 200
 
+        # Define os parâmetros da Tecla A
         self.jogador_2.x = 1150
         self.jogador_2.y = 30
         self.jogador_2.largura = 50
         self.jogador_2.altura = 50
 
+        # Define os parâmetros da Tecla D
         self.jogador_3.x = 1150
         self.jogador_3.y = 320
         self.jogador_3.largura = 50
         self.jogador_3.altura = 50
 
+        # Define os parâmetros da Barra Amarela
         self.jogador_4.x = 1150
         self.jogador_4.y = 100
         self.jogador_4.largura = 50
         self.jogador_4.altura = 10
 
+        # Define os parâmetros do Obstáculo 1
         self.obstaculo_1.x = self.jogo.screenSize[0] / 2
         self.obstaculo_1.y = 0
         self.obstaculo_1.largura = 50
         self.obstaculo_1.altura = 230
 
+        # Define os parâmetros do Obstáculo 2
         self.obstaculo_2.largura = 50
-        self.obstaculo_2.altura = 400
+        self.obstaculo_2.altura = 350
         self.obstaculo_2.x = self.jogo.screenSize[0] / 2
         self.obstaculo_2.y = self.jogo.screenSize[1] - self.obstaculo_2.altura
 
+        # Define os parâmetros do Astronauta
         self.astronauta.x_inicial = 70
         self.astronauta.y_inicial = self.jogo.screenSize[1] - 70
 
         self.astronauta.x = self.astronauta.x_inicial
         self.astronauta.y = self.astronauta.y_inicial
 
-        self.astronauta.alfa = 60 * (np.pi / 180)
+        self.astronauta.alfa = 30 * (np.pi / 180)
 
         self.astronauta.vel_inicial = (1 / self.jogo.fps) * 100
         self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
@@ -96,13 +107,10 @@ class Angulo():
                 self.gameEvent(event)
 
             self.gameUpdate()
-            #self.jogo.angulo_Image()
             self.jogo.gameImage()
             self.gameRender()
 
             pygame.display.update()
-
-        pygame.quit()
 
     def gameEvent(self, event):
 
@@ -117,7 +125,7 @@ class Angulo():
 
             if(event.key == pygame.K_ESCAPE):
                 self.jogo.gameRunning = False
-                
+
             elif(event.key == pygame.K_SPACE):
                 self.movimento_iniciado = True
         
@@ -135,8 +143,13 @@ class Angulo():
                     self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
                     self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
                       
+            if (self.jogador_4.altura <  10):
+                self.jogador_4.altura = 10
+                self.astronauta.alfa = 30 * (np.pi / 180)
+    
             if (self.jogador_4.altura >  self.jogador_1.altura):
                 self.jogador_4.altura = 10
+                self.astronauta.alfa = 30 * (np.pi / 180)
 
     def gameUpdate(self):
 
@@ -210,6 +223,7 @@ class Angulo():
         # escreve os textos explicativos das teclas
         self.jogo.draw_text("+ Âng.", self.textoFont, (BLACK), self.jogo.screen, self.jogador_2.x + 60, 42.5)
         self.jogo.draw_text("- Âng.", self.textoFont, (BLACK), self.jogo.screen, self.jogador_3.x + 60, 42.5 + 290)
+        self.jogo.draw_text("Aperte 'Espaço' para começar", self.teclaFont, (BLACK), self.jogo.screen, 20, 20)
 
         # desenha o astronauta
         pygame.draw.circle(self.jogo.screen, (PURPLE), (self.astronauta.x, self.astronauta.y), self.astronauta.raio)
@@ -225,4 +239,4 @@ class Angulo():
             (
                 (self.astronauta.x + self.astronauta.dir_x * self.astronauta.raio * 3), 
                 (self.astronauta.y + self.astronauta.dir_y * self.astronauta.raio * 3)
-            ))               
+            ))
