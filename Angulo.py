@@ -17,22 +17,22 @@ class Angulo():
 
         self.movimento_iniciado = False
 
-        self.jogador_1.x = 890
+        self.jogador_1.x = 1150
         self.jogador_1.y = 100
         self.jogador_1.largura = 50
         self.jogador_1.altura = 200
 
-        self.jogador_2.x = 890
+        self.jogador_2.x = 1150
         self.jogador_2.y = 30
         self.jogador_2.largura = 50
         self.jogador_2.altura = 50
 
-        self.jogador_3.x = 890
+        self.jogador_3.x = 1150
         self.jogador_3.y = 320
         self.jogador_3.largura = 50
         self.jogador_3.altura = 50
 
-        self.jogador_4.x = 890
+        self.jogador_4.x = 1150
         self.jogador_4.y = 100
         self.jogador_4.largura = 50
         self.jogador_4.altura = 10
@@ -69,13 +69,17 @@ class Angulo():
         '''
     
         self.jogo.screen = pygame.display.set_mode(self.jogo.screenSize)
-        self.jogo.title = "Fase 3"
+        self.jogo.title = "Variando o Ângulo"
         pygame.display.set_caption(self.jogo.title)
 
         if(self.jogo.icon != None):
             pygame.display.set_icon(self.jogo.icon)
 
         self.jogo.gameClock = pygame.time.Clock()
+
+        pygame.font.init()
+        self.teclaFont = pygame.font.SysFont("Roboto", 45)
+        self.textoFont = pygame.font.SysFont("Roboto", 30)
 
     def gameMain(self):
 
@@ -92,28 +96,9 @@ class Angulo():
                 self.gameEvent(event)
 
             self.gameUpdate()
+            #self.jogo.angulo_Image()
             self.jogo.gameImage()
-            self.jogo.angulo_Image()
             self.gameRender()
-
-            if(self.movimento_iniciado == False):
-                for event in pygame.event.get():
-
-                   if (event.type == pygame.KEYDOWN):
-                       if (event.key == pygame.K_a):
-                          self.jogador_4.altura = self.jogador_4.altura + 10
-                          self.astronauta.alfa = self.astronauta.alfa + 5 * (np.pi / 180)
-                          self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
-                          self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
-                      
-                       if (event.key == pygame.K_d):
-                          self.jogador_4.altura = self.jogador_4.altura - 10
-                          self.astronauta.alfa = self.astronauta.alfa - 5 * (np.pi / 180)
-                          self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
-                          self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
-                      
-                if (self.jogador_4.altura >  self.jogador_1.altura):
-                        self.jogador_4.altura = 10
 
             pygame.display.update()
 
@@ -132,15 +117,26 @@ class Angulo():
 
             if(event.key == pygame.K_ESCAPE):
                 self.jogo.gameRunning = False
+                
             elif(event.key == pygame.K_SPACE):
                 self.movimento_iniciado = True
-
-    '''
-        def gameReset(self):
-
-            start_message = gameFont.render("Aperte a tecla 'E' para iniciar o lançamento", 1, (255,255,255))
-            screen.blit(start_message, (screenSize[0] / 2 - start_message.get_width() , screenSize[1] / 3))
-    '''
+        
+        if(self.movimento_iniciado == False):
+            if (event.type == pygame.KEYDOWN):
+                if (event.key == pygame.K_a):
+                    self.jogador_4.altura = self.jogador_4.altura + 10
+                    self.astronauta.alfa = self.astronauta.alfa + 5 * (np.pi / 180)
+                    self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
+                    self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
+                
+                if (event.key == pygame.K_d):
+                    self.jogador_4.altura = self.jogador_4.altura - 10
+                    self.astronauta.alfa = self.astronauta.alfa - 5 * (np.pi / 180)
+                    self.astronauta.vel_y = self.astronauta.vel_inicial * np.sin(self.astronauta.alfa)
+                    self.astronauta.vel_x = self.astronauta.vel_inicial * np.cos(self.astronauta.alfa)
+                      
+            if (self.jogador_4.altura >  self.jogador_1.altura):
+                self.jogador_4.altura = 10
 
     def gameUpdate(self):
 
@@ -194,23 +190,38 @@ class Angulo():
         '''
             Função responsável por desenhar na tela do jogo
         '''
+
+        WHITE = (255, 255, 255)
+        YELLOW = (242, 210, 29)
+        BLUE = (30, 30, 160)
+        PURPLE = (22, 5, 89)
+        BLACK = (12, 12, 12)
+
         # desenha o botao do jogador
-        pygame.draw.rect(self.jogo.screen, (255, 255, 0), (self.jogador_1.x, self.jogador_1.y, self.jogador_1.largura, self.jogador_1.altura))
-        pygame.draw.rect(self.jogo.screen, (255, 0, 255), (self.jogador_2.x, self.jogador_2.y, self.jogador_2.largura, self.jogador_2.altura))
-        pygame.draw.rect(self.jogo.screen, (255, 0, 255), (self.jogador_3.x, self.jogador_3.y, self.jogador_3.largura, self.jogador_3.altura))
-        pygame.draw.rect(self.jogo.screen, (0, 0, 0), (self.jogador_4.x, self.jogador_4.y, self.jogador_4.largura, self.jogador_4.altura))
+        pygame.draw.rect(self.jogo.screen, (BLACK), (self.jogador_1.x, self.jogador_1.y, self.jogador_1.largura, self.jogador_1.altura))
+        pygame.draw.rect(self.jogo.screen, (BLUE), (self.jogador_2.x, self.jogador_2.y, self.jogador_2.largura, self.jogador_2.altura))
+        pygame.draw.rect(self.jogo.screen, (BLUE), (self.jogador_3.x, self.jogador_3.y, self.jogador_3.largura, self.jogador_3.altura))
+        pygame.draw.rect(self.jogo.screen, (YELLOW), (self.jogador_4.x, self.jogador_4.y, self.jogador_4.largura, self.jogador_4.altura))
         
+        # desenha as teclas que aumentam/diminuem a velocidade
+        self.jogo.draw_text("A", self.teclaFont, (WHITE), self.jogo.screen, self.jogador_2.x + 12.5, 42.5)
+        self.jogo.draw_text("D", self.teclaFont, (WHITE), self.jogo.screen, self.jogador_3.x + 12.5, 42.5 + 290)
+
+        # escreve os textos explicativos das teclas
+        self.jogo.draw_text("+ Âng.", self.textoFont, (BLACK), self.jogo.screen, self.jogador_2.x + 60, 42.5)
+        self.jogo.draw_text("- Âng.", self.textoFont, (BLACK), self.jogo.screen, self.jogador_3.x + 60, 42.5 + 290)
+
         # desenha o astronauta
-        pygame.draw.circle(self.jogo.screen, (0, 0, 0), (self.astronauta.x, self.astronauta.y), self.astronauta.raio)
+        pygame.draw.circle(self.jogo.screen, (PURPLE), (self.astronauta.x, self.astronauta.y), self.astronauta.raio)
 
         # desenha o objeto_1
-        pygame.draw.rect(self.jogo.screen, (255, 255, 255), (self.obstaculo_1.x, self.obstaculo_1.y, self.obstaculo_1.largura, self.obstaculo_1.altura))
+        pygame.draw.rect(self.jogo.screen, (BLACK), (self.obstaculo_1.x, self.obstaculo_1.y, self.obstaculo_1.largura, self.obstaculo_1.altura))
 
         # desenha a objeto_2
-        pygame.draw.rect(self.jogo.screen, (255, 255, 255), (self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
+        pygame.draw.rect(self.jogo.screen, (BLACK), (self.obstaculo_2.x, self.obstaculo_2.y, self.obstaculo_2.largura, self.obstaculo_2.altura))
        
         # desenha uma linha indicando a direção
-        pygame.draw.line(self.jogo.screen, (255, 255, 255), (self.astronauta.x, self.astronauta.y), 
+        pygame.draw.line(self.jogo.screen, (WHITE), (self.astronauta.x, self.astronauta.y), 
             (
                 (self.astronauta.x + self.astronauta.dir_x * self.astronauta.raio * 3), 
                 (self.astronauta.y + self.astronauta.dir_y * self.astronauta.raio * 3)

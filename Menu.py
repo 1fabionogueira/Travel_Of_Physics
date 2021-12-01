@@ -48,21 +48,21 @@ class MainMenu():
             
             mx, my = pygame.mouse.get_pos()
 
-            if self.button_2.collidepoint((mx, my)):
-                if self.click:
-                    self.fase2(event)
-
             if self.button_1.collidepoint((mx, my)):
                 if self.click:
-                    self.fase1(event)
+                    self.fase1()
+
+            if self.button_2.collidepoint((mx, my)):
+                if self.click:
+                    self.fase2()
 
             if self.button_3.collidepoint((mx, my)):
                 if self.click:
-                    self.fase3(event)
+                    self.fase3()
 
             if self.button_4.collidepoint((mx, my)):
                 if self.click:
-                    self.fase4(event)
+                    self.fase4()
 
             self.click = False
             
@@ -83,85 +83,69 @@ class MainMenu():
                 self.click = True
 
     
-    def fase1(self, event):
+    def fase1(self):
 
         running = True
         while running:
 
             variavelocidade = VariaVelocidade()
             variavelocidade.initGame()
-            variavelocidade.gameMain()
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
+            while (variavelocidade.jogo.gameRunning == True):
+                variavelocidade.gameMain()
+            
+            running = False
+        
+        self.initMenu()
+        self.main_menu()
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-
-            pygame.display.update()
-            self.menuClock.tick(self.fps)
-
-    def fase2(self, event):
+    def fase2(self):
 
         running = True
         while running:
             
             angulo = Angulo()
             angulo.initGame()
-            angulo.gameMain()
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
+            while (angulo.jogo.gameRunning == True):
+                angulo.gameMain()
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-
-            pygame.display.update()
-            self.menuClock.tick(self.fps)
+            running = False
+        
+        menu.initMenu()
+        menu.main_menu()
     
-    def fase3(self, event):
+    def fase3(self):
 
         running = True
         while running:
 
             velangulo = VelAngulo()
             velangulo.initGame()
-            velangulo.gameMain()
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
+            while (velangulo.jogo.gameRunning == True):
+                velangulo.gameMain()
 
-            pygame.display.update()
-            self.menuClock.tick(self.fps)
+            running = False
         
-    def fase4(self, event):
+        menu.initMenu()
+        menu.main_menu()
+        
+    def fase4(self):
 
         running = True
         while running:
 
             explore = Explorar()
             explore.initGame()
-            explore.gameMain()
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
+            while (explore.jogo.gameRunning == True):
+                explore.gameMain()
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
+            running = False
 
-            pygame.display.update()
-            self.menuClock.tick(self.fps)
+        menu.initMenu()
+        menu.main_menu()
 
     def menuRender(self):
         '''
