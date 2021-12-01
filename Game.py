@@ -1,4 +1,6 @@
-import pygame
+from pygame.image import load
+from pygame.transform import scale
+from os.path import join 
 
 class Objeto():
 
@@ -44,13 +46,23 @@ class Foguete():
     # gravidade (m/s²)
     g = 9.80665 / (100 ** 2)
 
+class Jogador():
+
+    '''
+       Classe responsável por poder alterar variavel
+    '''
+    x = 0
+    y = 0
+    largura = 0
+    altura = 0
+
 class Game():
 
     '''
         Classe reponsável por gerenciar o jogo
     '''
 
-    def __init__(self, screenSize = (1024, 768), fps=100, title ='', icon=None):
+    def __init__(self, screenSize = (1280, 720), fps=100, title ='', icon=None):
 
         self.gameRunning = True
 
@@ -58,3 +70,40 @@ class Game():
         self.fps = fps # Quantidade de frames por segundo
         self.title = title # Nome do jogo
         self.icon = icon # ícone do jogo 
+
+    def draw_text(self, text, font, color, surface, x, y):
+
+        '''
+            Função responsável por escrever na tela
+        '''
+        textobj = font.render(text, 1, color)
+        textrect = textobj.get_rect()
+        textrect.topleft = (x, y)
+        surface.blit(textobj, textrect)
+    
+    def gameImage(self):
+
+        # Imagem do canhão
+        canhão_largura, canhão_altura = 100, 100
+        canhão_image = load(join('assets/cannon.png'))
+        canhão = scale(canhão_image, (canhão_largura, canhão_altura))
+
+        self.screen.blit(canhão, (0, self.screenSize[1] - canhão_altura))
+
+    def variavelocidadeImage(self):
+
+        # Imagem de fundo
+        background_largura, background_altura = self.screenSize[0], self.screenSize[1]
+        background_image = load(join('assets/space.png'))
+        background = scale(background_image, (background_largura, background_altura))
+
+        self.screen.blit(background,(0, 0))
+
+    def angulo_Image(self):
+        pass
+
+    def velangulo_Image(self):
+        pass
+
+    def explore_Image(self):
+        pass
