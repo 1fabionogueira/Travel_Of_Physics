@@ -8,8 +8,8 @@
 
 ### Integrantes do projeto:
 
-* Fábio Franchi Gomes Nogueira - Código
-* João Marcos Brandão Lopes - Documentação
-* Lucas Lubrano Melo - Código
-* Pedro Augusto de Camargo - Documentação
-* Victor Campos - Código
+* Fábio Franchi Gomes Nogueira - Código (N° USP: 12702026 ; Email: fanogueira@usp.br)
+* João Marcos Brandão Lopes - Documentação (N° USP: 12548296 ; Email: joaomarcos.jm_wang@usp.br)
+* Lucas Lubrano Melo - Código (N° USP: 12725366 ; Email: lucas.lubrano1@usp.br)
+* Pedro Augusto de Camargo - Documentação (N° USP: 11953870 ; Email: pedroaugustobr@usp.br)
+* Victor Campos - Código (N° USP: 10362406)
